@@ -188,6 +188,18 @@ router.get('/my-products/available', auth, async (req, res) => {
 });
 
 
+// GET /api/items/all
+router.get('/all', async (req, res) => {
+  try {
+    const items = await Item.find().sort({ createdAt: -1 }); // Latest first
+    res.status(200).json(items);
+  } catch (err) {
+    console.error('Get All Items Error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 
 
 
