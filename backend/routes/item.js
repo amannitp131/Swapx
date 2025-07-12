@@ -146,6 +146,49 @@ router.post('/:id/purchase', auth, async (req, res) => {
 
 
 
+router.get('/my-products', auth, async (req, res) => {
+  try {
+    const items = await Item.find({ owner: req.user._id }).sort({ createdAt: -1 });
+    res.status(200).json(items);
+  } catch (err) {
+    console.error('Get My Products Error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+router.get('/my-products/purchased', auth, async (req, res) => {
+  try {
+    const items = await Item.find({
+      owner: req.user._id,
+      isPurchased: true
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json(items);
+  } catch (err) {
+    console.error('Get Purchased Products Error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+
+router.get('/my-products/available', auth, async (req, res) => {
+  try {
+    const items = await Item.find({
+      owner: req.user._id,
+      isPurchased: false
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json(items);
+  } catch (err) {
+    console.error('Get Available Products Error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+
 
 
 
