@@ -76,7 +76,7 @@ export default function Home() {
       <section className="bg-red-600 text-white py-14 text-center">
         <h2 className="text-3xl font-semibold mb-4">Join the SwapX Movement</h2>
         <p className="mb-6">Thousands are already swapping and saving. What are you waiting for?</p>
-        <Link href="/register">
+        <Link href="/signup">
           <span className="bg-black hover:bg-gray-900 px-6 py-2 rounded text-white transition">
             Create an Account
           </span>

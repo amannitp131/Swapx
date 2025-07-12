@@ -3,10 +3,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Featured() {
   const [featuredItems, setFeaturedItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchFeatured() {
@@ -22,6 +24,11 @@ export default function Featured() {
     }
     fetchFeatured();
   }, []);
+
+  const handleViewDetails = (id) => {
+    localStorage.setItem('selectedItemId', id);
+    router.push('/itemdesc');
+  };
 
   return (
     <section className="bg-black text-white py-16 px-4">
@@ -53,12 +60,12 @@ export default function Featured() {
                 <div className="p-4 space-y-2">
                   <h3 className="text-lg font-semibold">{item.title}</h3>
                   <p className="text-sm text-gray-400">Price: ${item.price}</p>
-                  <Link
-                    href={`/item/${item._id}`}
-                    className="inline-block mt-2 text-sm text-red-500 hover:underline"
+                  <button
+                    onClick={() => handleViewDetails(item._id)}
+                    className="inline-block mt-2 text-sm text-red-500 hover:underline bg-transparent border-none p-0 cursor-pointer"
                   >
                     View Details →
-                  </Link>
+                  </button>
                 </div>
               </div>
             ))}
