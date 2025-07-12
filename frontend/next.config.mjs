@@ -3,7 +3,9 @@ const nextConfig = {
     images: {
         domains: [
             'images.unsplash.com',
-            'encrypted-tbn0.gstatic.com'
+            'encrypted-tbn0.gstatic.com',
+            'localhost',
+            'i.imgur.com'
         ],
     },
 };
