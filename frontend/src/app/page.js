@@ -5,8 +5,20 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import Image from "next/image";
 import Featured from "@/components/Featured";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
+  // Redirect if user is already logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token === "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODcyM2Y4O") {
+      router.replace("/dashboard"); 
+    }
+  }, [router]);
+
   return (
     <>
       <Navbar />
@@ -27,11 +39,11 @@ export default function Home() {
                   Start Swapping
                 </span>
               </Link>
-              <Link href="/add-item">
+              {/* <Link href="/add-item">
                 <span className="border border-red-600 text-red-500 hover:bg-red-600 hover:text-white px-6 py-2 rounded transition">
                   List an Item
                 </span>
-              </Link>
+              </Link> */}
             </div>
           </div>
           <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center">
@@ -65,10 +77,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Items Placeholder */}
+      {/* Featured Items */}
       <section className="bg-black py-16 px-6 text-white">
         <div className="max-w-6xl mx-auto text-center">
-          <Featured/>
+          <Featured />
         </div>
       </section>
 

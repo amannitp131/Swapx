@@ -8,15 +8,15 @@ export default function Navbar({ isAdmin = false, user = null }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hasToken, setHasToken] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setHasToken(token === "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODcyMGU3ZTBlODljMDNmMGM5NDUxOWMiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1MjMxMjUxMywiZXhwIjoxNzUyOTE3MzEzfQ.Yn4IjJMAJ74rOb-3ueadoV67ciV9oP6U6lqWwhqLwO8");
-  }, []);
+useEffect(() => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  setHasToken(!!token);
+}, []);
 
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Browse Items", path: "/browse" },
-    { name: "List Item", path: "/add-item" },
+    // { name: "List Item", path: "/add-item" },
     hasToken
       ? { name: "Dashboard", path: "/dashboard" }
       : { name: "Login", path: "/login" },
