@@ -50,6 +50,8 @@ router.post('/signup', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+
 router.post('/verify-otp', async (req, res) => {
   const { email, otp } = req.body;
 
@@ -107,7 +109,7 @@ router.post('/login', async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );
 
-    // Respond with token and user data (excluding password)
+    // Respond with token and user data 
     res.status(200).json({
       message: 'Login successful',
       token,

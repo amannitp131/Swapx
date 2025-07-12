@@ -1,15 +1,45 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Logging in:", { email, password });
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, role }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Login failed");
+      } else {
+        // Save token to localStorage
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+        router.push("/dashboard");
+      }
+    } catch (err) {
+      setError("Server error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -58,6 +88,8 @@ export default function Login() {
             <select
               id="role"
               name="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
               className="w-full px-4 py-2 bg-black border border-red-600 text-red-500 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
               style={{
                 backgroundColor: "#000",
@@ -80,11 +112,16 @@ export default function Login() {
             </select>
           </div>
 
+          {error && (
+            <div className="text-red-500 text-sm text-center">{error}</div>
+          )}
+
           <button
             type="submit"
             className="w-full bg-red-600 hover:bg-red-700 transition text-white font-medium py-2 rounded"
+            disabled={loading}
           >
-            Log In
+            {loading ? "Logging in..." : "Log In"}
           </button>
         </form>
 

@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from 'next/navigation'; 
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -11,14 +12,35 @@ export default function RegisterPage() {
     role: "user",
   });
 
+  const router = useRouter(); // ✅ Initialize router
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // TODO: Implement API call or auth logic here
-    console.log("Registering:", form);
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem("pendingEmail", form.email);
+        alert(data.message);
+        router.push("/verify");
+      } else {
+        alert(data.message || "Registration failed");
+      }
+    } catch (err) {
+      console.error("Registration error:", err);
+      alert("Something went wrong.");
+    }
   };
 
   return (
