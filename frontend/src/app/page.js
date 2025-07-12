@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import Image from "next/image";
+import Featured from "@/components/Featured";
 
 export default function Home() {
   return (
@@ -67,9 +68,7 @@ export default function Home() {
       {/* Featured Items Placeholder */}
       <section className="bg-black py-16 px-6 text-white">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-8 text-red-600">Featured Items</h2>
-          <p className="text-gray-400">This section will showcase the most popular or newest items added to SwapX.</p>
-          {/* Future: Add item cards or carousel here */}
+          <Featured/>
         </div>
       </section>
 
