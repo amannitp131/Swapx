@@ -1,17 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
 export default function Navbar({ isAdmin = false, user = null }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hasToken, setHasToken] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setHasToken(token === "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODcyMGU3ZTBlODljMDNmMGM5NDUxOWMiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1MjMxMjUxMywiZXhwIjoxNzUyOTE3MzEzfQ.Yn4IjJMAJ74rOb-3ueadoV67ciV9oP6U6lqWwhqLwO8");
+  }, []);
 
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Browse Items", path: "/browse" },
     { name: "List Item", path: "/add-item" },
-    { name: "Dashboard", path: "/dashboard" },
+    hasToken
+      ? { name: "Dashboard", path: "/dashboard" }
+      : { name: "Login", path: "/login" },
   ];
 
   return (

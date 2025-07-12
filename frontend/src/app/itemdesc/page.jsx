@@ -1,29 +1,73 @@
 "use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function ItemDetailPage() {
-  // Dummy item data
-  const item = {
-    title: "Red Cotton Hoodie",
-    condition: "Like New",
-    size: "L",
-    category: "Men",
-    type: "Hoodie",
-    description:
-      "Warm and stylish red cotton hoodie, worn only twice. Perfect for winter layering.",
-    tags: ["winter", "hoodie", "red"],
-    uploader: {
-      name: "Tanmay Gupta",
-      email: "tanmay@example.com",
-    },
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1eEWi_zPNrq5KlXXP3SXlIKKMWfpVVEsmNQ&s",
-    isAvailable: true,
-    redeemPoints: 30,
-  };
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // Example user coin balance
-  const userCoins = 20; // Change this value to test
+  const userCoins = 20; 
+
+  useEffect(() => {
+  async function fetchItem() {
+    try {
+      const itemId = localStorage.getItem("selectedItemId");
+      if (!itemId) throw new Error("No item ID found in localStorage");
+      const res = await fetch(`http://localhost:5000/api/items/${itemId}`);
+      if (!res.ok) throw new Error("Item not found");
+      const data = await res.json();
+      setItem({
+        _id: data._id,
+        title: data.title,
+        description: data.description,
+        imageUrl: data.image,
+        uploader: {
+          name: data.owner?.name || "Tanmay Gupta",
+          email: data.owner?.email || "tanmay@example.com",
+        },
+        isAvailable: true,
+        redeemPoints: 30,
+        condition: "Like New",
+        size: "L",
+        category: "Men",
+        type: "Hoodie",
+        tags: ["winter", "hoodie", "red"],
+      });
+    } catch (err) {
+      setItem({
+        _id: "6871f30286710875c0781b72",
+        title: "Redmi Note 12",
+        description: "Slightly used, great condition",
+        imageUrl:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1eEWi_zPNrq5KlXXP3SXlIKKMWfpVVEsmNQ&s",
+        uploader: {
+          name: "Tanmay Gupta",
+          email: "tanmay@example.com",
+        },
+        isAvailable: true,
+        redeemPoints: 30,
+        condition: "Like New",
+        size: "L",
+        category: "Men",
+        type: "Hoodie",
+        tags: ["winter", "hoodie", "red"],
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+  fetchItem();
+}, []);
+
+
+  if (loading || !item) {
+    return (
+      <main className="min-h-screen bg-black text-white flex items-center justify-center">
+        <span>Loading...</span>
+      </main>
+    );
+  }
 
   const hasEnoughCoins = userCoins >= item.redeemPoints;
 
@@ -99,17 +143,20 @@ export default function ItemDetailPage() {
           {/* Actions */}
           {item.isAvailable && (
             <div className="flex flex-wrap gap-4 mt-6">
-              <button className="bg-red-600 hover:bg-red-700 px-6 py-2 rounded text-white transition-colors">
+              <button className="bg-red-600 hover:bg-red-700 px-6 py-2 rounded text-white transition-colors cursor-pointer">
                 Request Swap
               </button>
               {hasEnoughCoins ? (
-                <button className="border border-red-600 hover:bg-red-700 hover:text-white px-6 py-2 rounded text-red-500 transition-colors">
+                <button className="border border-red-600 hover:bg-red-700 hover:text-white px-6 py-2 rounded text-red-500 transition-colors cursor-pointer">
                   Redeem via Points
                 </button>
               ) : (
-                <span className="px-6 py-2 rounded text-red-400 border border-red-600 bg-gray-900">
+                <button
+                  className="px-6 py-2 rounded text-red-400 border border-red-600 bg-gray-900 cursor-pointer"
+                  onClick={() => window.location.href = "/Purchase"}
+                >
                   Purchase coins
-                </span>
+                </button>
               )}
             </div>
           )}
