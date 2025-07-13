@@ -13,7 +13,7 @@
 
 *Sustainable fashion through community-driven clothing exchange*
 
-[Live Demo](#https://drive.google.com/file/d/1HdFQejGuOulhPTAKSazeLC1J21EhBCh8/view?usp=sharing) • [Documentation](#) • [Report Bug](#) • [Request Feature](#)
+[Live Demo](https://drive.google.com/file/d/1HdFQejGuOulhPTAKSazeLC1J21EhBCh8/view?usp=sharing)
 
 </div>
 
